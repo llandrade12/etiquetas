@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etiquetas WhatsApp</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════
+   THEMES
+═══════════════════════════════════ */
+:root {
+  --green: #25d366;
+  --green-dim: #128c48;
+  --green-glow: rgba(37,211,102,0.18);
+  --red: #f85149;
+  --yellow: #e3b341;
+  --blue: #58a6ff;
+  --purple: #bc8cff;
+}
+
+[data-theme="dark"] {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #1c2330;
+  --surface3:  #212830;
+  --border:    #2a3441;
+  --text:      #e6edf3;
+  --text-dim:  #7d8590;
+  --text-muted:#3d444d;
+  --grid-line: rgba(37,211,102,0.025);
+  --shadow:    0 4px 24px rgba(0,0,0,0.4);
+}
+
+[data-theme="light"] {
+  --bg:        #f4f6f8;
+  --surface:   #ffffff;
+  --surface2:  #f0f2f5;
+  --surface3:  #e8eaed;
+  --border:    #d1d9e0;
+  --text:      #1c2330;
+  --text-dim:  #586069;
+  --text-muted:#adb5bd;
+  --grid-line: rgba(37,211,102,0.06);
+  --shadow:    0 4px 24px rgba(0,0,0,0.08);
+}
+
+/* ═══════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════ */
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events:none; z-index:0;
+}
+
+.wrapper {
+  position:relative; z-index:1;
+  max-width:1000px;
+  margin:0 auto;
+  padding:32px 20px 80px;
+}
+
+/* ═══════════════════════════════════
+   HEADER
+═══════════════════════════════════ */
+header {
+  display:flex; align-items:center; gap:14px;
+  margin-bottom:32px;
+}
+
+.logo {
+  width:46px; height:46px;
+  background:var(--green);
+  border-radius:13px;
+  display:grid; place-items:center;
+  font-size:22px;
+  box-shadow:0 0 28px var(--green-glow);
+  flex-shrink:0;
+}
+
+.header-text h1 {
+  font-family:'Syne',sans-serif;
+  font-size:21px; font-weight:800; letter-spacing:-0.5px;
+}
+.header-text p { font-size:11px; color:var(--text-dim); margin-top:2px; }
+
+.header-actions { margin-left:auto; display:flex; gap:8px; align-items:center; }
+
+/* Theme toggle */
+.btn-theme {
+  width:38px; height:38px;
+  border-radius:10px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text-dim);
+  font-size:17px;
+  cursor:pointer;
+  display:grid; place-items:center;
+  transition:all 0.2s;
+}
+.btn-theme:hover { border-color:var(--green); color:var(--green); }
+
+/* Google Sheets button */
+.btn-sheets {
+  display:flex; align-items:center; gap:7px;
+  padding:8px 14px;
+  border-radius:10px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text-dim);
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  cursor:pointer;
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+.btn-sheets:hover { border-color:#34a853; color:#34a853; }
+.btn-sheets .sheets-dot {
+  width:10px; height:10px;
+  border-radius:50%;
+  background:var(--text-muted);
+  transition:background 0.2s;
+  flex-shrink:0;
+}
+.btn-sheets.connected .sheets-dot { background:#34a853; box-shadow:0 0 8px rgba(52,168,83,0.5); }
+.btn-sheets.connected { border-color:#34a853; color:#34a853; }
+
+/* ═══════════════════════════════════
+   SUMMARY PANEL
+═══════════════════════════════════ */
+.summary-panel {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:20px;
+}
+@media(max-width:600px){ .summary-panel { grid-template-columns:repeat(2,1fr); } }
+
+.summary-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 16px;
+  display:flex; flex-direction:column; gap:6px;
+  transition:border-color 0.2s;
+}
+.summary-card:hover { border-color:var(--text-muted); }
+.summary-card .sc-label {
+  font-size:10px; color:var(--text-dim);
+  text-transform:uppercase; letter-spacing:1px;
+}
+.summary-card .sc-value {
+  font-family:'Syne',sans-serif;
+  font-size:26px; font-weight:800;
+  line-height:1;
+}
+.summary-card .sc-sub {
+  font-size:10px; color:var(--text-muted);
+}
+.sc-total  .sc-value { color:var(--text); }
+.sc-wa     .sc-value { color:var(--green); }
+.sc-labels .sc-value { color:var(--purple); }
+.sc-today  .sc-value { color:var(--yellow); }
+
+/* ═══════════════════════════════════
+   DATE BAR
+═══════════════════════════════════ */
+.date-bar {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:13px 18px;
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:18px; flex-wrap:wrap;
+}
+.date-bar label { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; flex-shrink:0; }
+
+.date-bar input[type="date"] {
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--text);
+  font-family:'DM Mono',monospace;
+  font-size:13px;
+  padding:7px 11px;
+  outline:none; cursor:pointer;
+  transition:border-color 0.2s;
+}
+.date-bar input[type="date"]:focus { border-color:var(--green); }
+
+.btn-today {
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--text-dim);
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  padding:7px 12px;
+  cursor:pointer;
+  transition:all 0.18s;
+  white-space:nowrap;
+}
+.btn-today:hover { border-color:var(--yellow); color:var(--yellow); }
+
+.date-badge {
+  margin-left:auto;
+  background:var(--green-glow);
+  border:1px solid var(--green-dim);
+  color:var(--green);
+  font-size:11px; padding:4px 12px;
+  border-radius:20px;
+}
+
+/* ═══════════════════════════════════
+   SECTION CARDS
+═══════════════════════════════════ */
+.section-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px 22px;
+  margin-bottom:18px;
+  position:relative; overflow:hidden;
+  transition:background 0.3s, border-color 0.3s;
+}
+.section-card.accent-purple::before {
+  content:''; position:absolute; top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--purple),transparent);
+}
+.section-card.accent-green::before {
+  content:''; position:absolute; top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+}
+
+.section-title {
+  font-family:'Syne',sans-serif;
+  font-size:11px; font-weight:700;
+  color:var(--text-dim);
+  text-transform:uppercase; letter-spacing:1.5px;
+  margin-bottom:16px;
+}
+
+/* ═══════════════════════════════════
+   LABEL MANAGER
+═══════════════════════════════════ */
+.label-create-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
+.label-create-row input[type="text"] {
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px; color:var(--text);
+  font-family:'DM Mono',monospace; font-size:13px;
+  padding:9px 13px; outline:none; flex:1; min-width:160px;
+  transition:border-color 0.2s, box-shadow 0.2s;
+}
+.label-create-row input[type="text"]:focus {
+  border-color:var(--purple);
+  box-shadow:0 0 0 3px rgba(188,140,255,0.12);
+}
+.label-create-row input::placeholder { color:var(--text-muted); }
+
+.color-picker { display:flex; gap:6px; flex-wrap:wrap; }
+
+.color-dot {
+  width:24px; height:24px; border-radius:50%;
+  border:2px solid transparent;
+  cursor:pointer; transition:transform 0.15s, border-color 0.15s; flex-shrink:0;
+}
+.color-dot:hover { transform:scale(1.2); }
+.color-dot.selected { border-color:white; transform:scale(1.15); }
+
+[data-theme="light"] .color-dot.selected { border-color:#333; }
+
+.btn-create-label {
+  background:var(--purple); color:#000;
+  border:none; border-radius:8px;
+  font-family:'Syne',sans-serif; font-weight:700; font-size:12px;
+  padding:9px 16px; cursor:pointer; white-space:nowrap;
+  transition:opacity 0.2s, transform 0.1s;
+}
+.btn-create-label:hover { opacity:0.85; }
+.btn-create-label:active { transform:scale(0.97); }
+
+.existing-labels { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+
+.label-chip {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:5px 10px; border-radius:20px;
+  font-size:12px; font-family:'Syne',sans-serif; font-weight:600; border:1px solid;
+}
+.label-chip-del {
+  background:none; border:none; color:inherit; opacity:0.5;
+  cursor:pointer; font-size:11px; padding:0; line-height:1; transition:opacity 0.15s;
+}
+.label-chip-del:hover { opacity:1; }
+
+/* ═══════════════════════════════════
+   CONTACT FORM
+═══════════════════════════════════ */
+.form-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr 150px 1fr;
+  gap:12px; align-items:end;
+}
+@media(max-width:720px){ .form-grid { grid-template-columns:1fr 1fr; } }
+
+.field { display:flex; flex-direction:column; gap:5px; }
+.field label { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
+
+.field input, .field select {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:8px; color:var(--text);
+  font-family:'DM Mono',monospace; font-size:13px;
+  padding:9px 13px; outline:none; width:100%;
+  -webkit-appearance:none; appearance:none;
+  transition:border-color 0.2s, box-shadow 0.2s;
+}
+.field input:focus, .field select:focus {
+  border-color:var(--green);
+  box-shadow:0 0 0 3px var(--green-glow);
+}
+.field input::placeholder { color:var(--text-muted); }
+.field select option { background:var(--surface2); }
+
+.form-footer { display:flex; justify-content:flex-end; margin-top:12px; }
+
+.btn-add {
+  background:var(--green); color:#000;
+  border:none; border-radius:8px;
+  font-family:'Syne',sans-serif; font-weight:700; font-size:13px;
+  padding:10px 22px; cursor:pointer;
+  transition:opacity 0.2s, transform 0.1s;
+}
+.btn-add:hover { opacity:0.85; }
+.btn-add:active { transform:scale(0.97); }
+
+/* ═══════════════════════════════════
+   SEARCH BAR
+═══════════════════════════════════ */
+.search-filter-row {
+  display:flex; gap:10px; align-items:center;
+  margin-bottom:14px; flex-wrap:wrap;
+}
+
+.search-wrap {
+  position:relative; flex:1; min-width:180px;
+}
+.search-wrap input {
+  width:100%;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px; color:var(--text);
+  font-family:'DM Mono',monospace; font-size:13px;
+  padding:9px 13px 9px 36px;
+  outline:none; transition:border-color 0.2s, box-shadow 0.2s;
+}
+.search-wrap input:focus { border-color:var(--green); box-shadow:0 0 0 3px var(--green-glow); }
+.search-wrap input::placeholder { color:var(--text-muted); }
+.search-icon {
+  position:absolute; left:11px; top:50%; transform:translateY(-50%);
+  color:var(--text-muted); font-size:14px; pointer-events:none;
+}
+
+/* ═══════════════════════════════════
+   FILTER CHIPS
+═══════════════════════════════════ */
+.filter-bar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.filter-label { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; flex-shrink:0; }
+
+.filter-chip {
+  padding:5px 14px; border-radius:20px;
+  font-family:'Syne',sans-serif; font-weight:600; font-size:12px;
+  cursor:pointer; border:1px solid var(--border);
+  background:var(--surface2); color:var(--text-dim);
+  transition:all 0.18s; white-space:nowrap;
+}
+.filter-chip:hover { border-color:var(--text-dim); color:var(--text); }
+.filter-chip.active { color:#000 !important; border-color:transparent !important; }
+
+/* ═══════════════════════════════════
+   LIST HEADER
+═══════════════════════════════════ */
+.list-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.list-title { font-family:'Syne',sans-serif; font-weight:700; font-size:13px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1.5px; }
+.count-pill { background:var(--surface2); border:1px solid var(--border); color:var(--text-dim); font-size:11px; padding:3px 10px; border-radius:20px; }
+
+/* ═══════════════════════════════════
+   GROUPS & CARDS
+═══════════════════════════════════ */
+.label-group { margin-bottom:18px; }
+.group-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; padding:0 4px; }
+.group-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.group-name { font-family:'Syne',sans-serif; font-weight:700; font-size:13px; }
+.group-count { font-size:11px; color:var(--text-muted); background:var(--surface2); padding:2px 8px; border-radius:10px; }
+
+.tags-container { display:flex; flex-direction:column; gap:7px; min-height:40px; }
+
+.empty-state {
+  text-align:center; padding:44px 20px;
+  color:var(--text-muted); font-size:13px;
+  border:1px dashed var(--border); border-radius:12px; margin-bottom:24px;
+}
+.empty-state .es-icon { display:block; font-size:28px; margin-bottom:10px; }
+
+.tag-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-left:3px solid; border-radius:10px;
+  padding:11px 14px;
+  display:grid;
+  grid-template-columns: 26px 1fr 148px 128px 78px 32px 32px 30px;
+  gap:9px; align-items:center;
+  animation:slideIn 0.22s ease;
+  transition:background 0.15s, box-shadow 0.15s;
+}
+.tag-card:hover { background:var(--surface2); box-shadow:var(--shadow); }
+
+@media(max-width:780px){
+  .tag-card { grid-template-columns:26px 1fr auto auto auto; grid-template-rows:auto auto; }
+  .tag-card .tag-badge, .tag-card .tag-date { grid-column:2; }
+}
+
+@keyframes slideIn {
+  from { opacity:0; transform:translateY(-6px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.tag-num   { font-size:11px; color:var(--text-muted); font-weight:500; }
+.tag-name  { font-family:'Syne',sans-serif; font-weight:600; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.tag-phone { font-size:12px; color:var(--green); }
+
+.tag-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:4px 10px; border-radius:20px;
+  font-family:'Syne',sans-serif; font-weight:600; font-size:11px;
+  border:1px solid; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis; max-width:100%;
+}
+.tag-date { font-size:11px; color:var(--text-dim); }
+
+/* Action buttons on card */
+.btn-wa, .btn-edit, .btn-delete {
+  width:30px; height:30px; border-radius:7px;
+  display:grid; place-items:center;
+  cursor:pointer; font-size:14px;
+  transition:all 0.18s; flex-shrink:0;
+  border:1px solid transparent; background:transparent;
+  text-decoration:none;
+}
+
+.btn-wa {
+  color:var(--green);
+  background:rgba(37,211,102,0.1);
+  border-color:rgba(37,211,102,0.25);
+}
+.btn-wa:hover { background:var(--green); color:#000; border-color:var(--green); transform:scale(1.08); }
+
+.btn-edit {
+  color:var(--blue);
+  background:rgba(88,166,255,0.1);
+  border-color:rgba(88,166,255,0.25);
+}
+.btn-edit:hover { background:var(--blue); color:#000; border-color:var(--blue); transform:scale(1.08); }
+
+.btn-delete { color:var(--text-muted); }
+.btn-delete:hover { background:rgba(248,81,73,0.12); border-color:var(--red); color:var(--red); transform:scale(1.08); }
+
+/* ═══════════════════════════════════
+   EDIT MODAL
+═══════════════════════════════════ */
+.modal-overlay {
+  position:fixed; inset:0; z-index:100;
+  background:rgba(0,0,0,0.6);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  backdrop-filter:blur(4px);
+  opacity:0; pointer-events:none;
+  transition:opacity 0.22s;
+  overflow-y:auto;
+}
+.modal-overlay.open { opacity:1; pointer-events:all; }
+
+.modal {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:28px;
+  width:100%; max-width:460px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  animation:modalIn 0.22s ease;
+  position:relative; overflow:hidden;
+}
+.modal::before {
+  content:''; position:absolute; top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--blue),transparent);
+}
+@keyframes modalIn {
+  from { opacity:0; transform:scale(0.95) translateY(10px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+
+.modal h2 {
+  font-family:'Syne',sans-serif; font-size:16px; font-weight:700;
+  margin-bottom:20px; color:var(--text);
+}
+.modal .field { margin-bottom:14px; }
+.modal-footer { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; }
+
+.btn-modal-save {
+  background:var(--blue); color:#000;
+  border:none; border-radius:8px;
+  font-family:'Syne',sans-serif; font-weight:700; font-size:13px;
+  padding:9px 20px; cursor:pointer; transition:opacity 0.2s;
+}
+.btn-modal-save:hover { opacity:0.85; }
+
+.btn-modal-cancel {
+  background:var(--surface2); color:var(--text-dim);
+  border:1px solid var(--border); border-radius:8px;
+  font-family:'DM Mono',monospace; font-size:13px;
+  padding:9px 16px; cursor:pointer; transition:all 0.2s;
+}
+.btn-modal-cancel:hover { border-color:var(--text-dim); color:var(--text); }
+
+/* ═══════════════════════════════════
+   GOOGLE SHEETS MODAL
+═══════════════════════════════════ */
+.sheets-modal {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:28px;
+  width:100%; max-width:520px;
+  max-height:90vh;
+  overflow-y:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  animation:modalIn 0.22s ease;
+  position:relative; overflow-x:hidden;
+  flex-shrink:0;
+}
+.sheets-modal::before {
+  content:''; position:absolute; top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#34a853,transparent);
+}
+.sheets-modal h2 {
+  font-family:'Syne',sans-serif; font-size:16px; font-weight:700;
+  margin-bottom:6px; color:var(--text);
+}
+.sheets-modal .subtitle { font-size:12px; color:var(--text-dim); margin-bottom:20px; line-height:1.6; }
+
+.sheets-step {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:10px; padding:14px 16px; margin-bottom:12px;
+}
+.sheets-step-num {
+  font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;
+}
+.sheets-step p { font-size:12px; color:var(--text); line-height:1.6; }
+.sheets-step a { color:#34a853; text-decoration:none; }
+.sheets-step a:hover { text-decoration:underline; }
+.sheets-step code {
+  background:var(--surface3); padding:2px 6px; border-radius:4px;
+  font-size:11px; color:var(--yellow); word-break:break-all;
+}
+
+.sheets-input-wrap { margin-top:8px; }
+.sheets-input-wrap input {
+  width:100%; background:var(--surface3); border:1px solid var(--border);
+  border-radius:8px; color:var(--text);
+  font-family:'DM Mono',monospace; font-size:12px;
+  padding:9px 13px; outline:none;
+  transition:border-color 0.2s;
+}
+.sheets-input-wrap input:focus { border-color:#34a853; }
+.sheets-input-wrap input::placeholder { color:var(--text-muted); }
+
+.sheets-status { margin-top:10px; font-size:12px; padding:8px 12px; border-radius:8px; display:none; }
+.sheets-status.ok  { background:rgba(37,211,102,0.1); color:var(--green); border:1px solid rgba(37,211,102,0.3); display:block; }
+.sheets-status.err { background:rgba(248,81,73,0.1); color:var(--red); border:1px solid rgba(248,81,73,0.3); display:block; }
+
+.sheets-footer { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; flex-wrap:wrap; }
+
+.btn-sheets-connect {
+  background:#34a853; color:#fff;
+  border:none; border-radius:8px;
+  font-family:'Syne',sans-serif; font-weight:700; font-size:13px;
+  padding:9px 18px; cursor:pointer; transition:opacity 0.2s;
+}
+.btn-sheets-connect:hover { opacity:0.85; }
+
+.btn-sheets-sync {
+  background:var(--surface2); color:var(--text-dim);
+  border:1px solid var(--border); border-radius:8px;
+  font-family:'DM Mono',monospace; font-size:12px;
+  padding:9px 14px; cursor:pointer; transition:all 0.2s;
+}
+.btn-sheets-sync:hover { border-color:#34a853; color:#34a853; }
+
+/* ═══════════════════════════════════
+   ACTION BUTTONS (bottom)
+═══════════════════════════════════ */
+.actions { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:28px; }
+@media(max-width:520px){ .actions { grid-template-columns:1fr; } }
+
+.action-btn {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:16px 14px;
+  cursor:pointer; font-family:'Syne',sans-serif; font-weight:700; font-size:13px;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  transition:all 0.2s;
+}
+.action-btn .icon { font-size:20px; }
+.action-btn .desc { font-size:10px; font-family:'DM Mono',monospace; font-weight:400; color:var(--text-dim); text-align:center; line-height:1.5; }
+.btn-copy   { color:var(--yellow); border-color:rgba(227,179,65,0.3); }
+.btn-copy:hover   { background:rgba(227,179,65,0.07); border-color:var(--yellow); transform:translateY(-2px); }
+.btn-import { color:var(--blue); border-color:rgba(88,166,255,0.3); }
+.btn-import:hover { background:rgba(88,166,255,0.07); border-color:var(--blue); transform:translateY(-2px); }
+.btn-export { color:var(--green); border-color:rgba(37,211,102,0.3); }
+.btn-export:hover { background:var(--green-glow); border-color:var(--green); transform:translateY(-2px); }
+
+/* ═══════════════════════════════════
+   TOAST
+═══════════════════════════════════ */
+.toast {
+  position:fixed; bottom:26px; left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--surface); border:1px solid var(--green); color:var(--green);
+  font-family:'DM Mono',monospace; font-size:13px;
+  padding:11px 22px; border-radius:30px; z-index:200;
+  transition:transform 0.35s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 8px 28px rgba(37,211,102,0.2);
+  white-space:nowrap; pointer-events:none;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════════
+   SYNC INDICATOR
+═══════════════════════════════════ */
+.sync-bar {
+  font-size:11px; color:var(--text-muted);
+  text-align:right; margin-bottom:10px;
+  min-height:16px;
+}
+.sync-bar.syncing { color:var(--yellow); }
+.sync-bar.ok      { color:var(--green); }
+.sync-bar.err     { color:var(--red); }
+
+#importInput { display:none; }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">💬</div>
+    <div class="header-text">
+      <h1>Etiquetas WhatsApp</h1>
+      <p>Organize contatos por dia, etiqueta e sincronize na nuvem</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-sheets" id="btnSheets" onclick="openSheetsModal()">
+        <span class="sheets-dot" id="sheetsDot"></span>
+        Google Sheets
+      </button>
+      <button class="btn-theme" id="btnTheme" onclick="toggleTheme()" title="Alternar tema">🌙</button>
+    </div>
+  </header>
+
+  <!-- SUMMARY PANEL -->
+  <div class="summary-panel" id="summaryPanel">
+    <div class="summary-card sc-total">
+      <span class="sc-label">Total hoje</span>
+      <span class="sc-value" id="scTotal">0</span>
+      <span class="sc-sub">contatos</span>
+    </div>
+    <div class="summary-card sc-wa">
+      <span class="sc-label">Com telefone</span>
+      <span class="sc-value" id="scWa">0</span>
+      <span class="sc-sub">prontos pro WhatsApp</span>
+    </div>
+    <div class="summary-card sc-labels">
+      <span class="sc-label">Etiquetas em uso</span>
+      <span class="sc-value" id="scLabels">0</span>
+      <span class="sc-sub">de <span id="scLabelsTotal">0</span> criadas</span>
+    </div>
+    <div class="summary-card sc-today">
+      <span class="sc-label">Sem etiqueta</span>
+      <span class="sc-value" id="scNoLabel">0</span>
+      <span class="sc-sub">a classificar</span>
+    </div>
+  </div>
+
+  <!-- DATE BAR -->
+  <div class="date-bar">
+    <label>📅 Data ativa</label>
+    <input type="date" id="activeDate">
+    <button class="btn-today" onclick="goToToday()">📍 Hoje</button>
+    <span class="date-badge" id="dateBadge">—</span>
+  </div>
+
+  <!-- LABEL MANAGER -->
+  <div class="section-card accent-purple">
+    <div class="section-title">🏷️ Gerenciar Etiquetas</div>
+    <div class="label-create-row">
+      <input type="text" id="inputLabelName" placeholder="Nome da etiqueta (ex: Novo Cliente, Retorno, Urgente…)">
+      <div class="color-picker" id="colorPicker"></div>
+      <button class="btn-create-label" onclick="createLabel()">+ Criar</button>
+    </div>
+    <div class="existing-labels" id="existingLabels">
+      <span style="font-size:11px;color:var(--text-muted)">Nenhuma etiqueta criada ainda.</span>
+    </div>
+  </div>
+
+  <!-- ADD CONTACT FORM -->
+  <div class="section-card accent-green">
+    <div class="section-title">+ Novo Contato</div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" id="inputName" placeholder="Ex: João Silva">
+      </div>
+      <div class="field">
+        <label>Telefone</label>
+        <input type="text" id="inputPhone" placeholder="(11) 99999-9999" maxlength="20">
+      </div>
+      <div class="field">
+        <label>Data de Contato</label>
+        <input type="date" id="inputDate">
+      </div>
+      <div class="field">
+        <label>Etiqueta</label>
+        <select id="inputLabel">
+          <option value="">— Sem etiqueta —</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-footer">
+      <button class="btn-add" onclick="addTag()">Adicionar Contato</button>
+    </div>
+  </div>
+
+  <!-- SEARCH + FILTER -->
+  <div class="search-filter-row">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar por nome ou telefone…" oninput="renderList()">
+    </div>
+  </div>
+  <div style="margin-bottom:14px;">
+    <div class="filter-bar" id="filterBar">
+      <span class="filter-label">Filtrar:</span>
+      <button class="filter-chip active" data-filter="all" onclick="setFilter('all',this)" style="background:var(--text-dim);color:#000;border-color:transparent">Todos</button>
+      <button class="filter-chip" data-filter="none" onclick="setFilter('none',this)">Sem etiqueta</button>
+    </div>
+  </div>
+
+  <!-- LIST HEADER -->
+  <div class="list-header">
+    <span class="list-title">Contatos do dia</span>
+    <span class="count-pill" id="countPill">0 registros</span>
+  </div>
+
+  <div class="sync-bar" id="syncBar"></div>
+  <div id="mainList"></div>
+
+  <!-- BOTTOM ACTIONS -->
+  <div class="actions">
+    <button class="action-btn btn-copy" onclick="copyReport()">
+      <span class="icon">📋</span>
+      Copiar Relatório
+      <span class="desc">Texto agrupado por<br>etiqueta, pronto pra colar</span>
+    </button>
+    <button class="action-btn btn-import" onclick="document.getElementById('importInput').click()">
+      <span class="icon">📥</span>
+      Importar CSV
+      <span class="desc">Carrega contatos e<br>etiquetas de outro dia</span>
+    </button>
+    <button class="action-btn btn-export" onclick="exportCSV()">
+      <span class="icon">💾</span>
+      Exportar CSV
+      <span class="desc">Salva tudo para<br>continuar amanhã</span>
+    </button>
+  </div>
+
+  <input type="file" id="importInput" accept=".csv" onchange="importCSV(event)">
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h2>✏️ Editar Contato</h2>
+    <div class="field">
+      <label>Nome</label>
+      <input type="text" id="editName" placeholder="Nome">
+    </div>
+    <div class="field">
+      <label>Telefone</label>
+      <input type="text" id="editPhone" placeholder="(11) 99999-9999" maxlength="20">
+    </div>
+    <div class="field">
+      <label>Data de Contato</label>
+      <input type="date" id="editDate">
+    </div>
+    <div class="field">
+      <label>Etiqueta</label>
+      <select id="editLabel">
+        <option value="">— Sem etiqueta —</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeEditModal()">Cancelar</button>
+      <button class="btn-modal-save" onclick="saveEdit()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- GOOGLE SHEETS MODAL -->
+<div class="modal-overlay" id="sheetsModal">
+  <div class="sheets-modal">
+    <h2>🟢 Integração Google Sheets</h2>
+    <p class="subtitle">Seus dados ficam salvos numa planilha Google e acessíveis de qualquer dispositivo, sem precisar exportar/importar CSV.</p>
+
+    <div class="sheets-step">
+      <div class="sheets-step-num">📄 Passo 1 — Crie a planilha</div>
+      <p>Acesse <a href="https://sheets.google.com" target="_blank" rel="noopener">sheets.google.com</a> e crie uma planilha nova (pode deixar vazia).</p>
+    </div>
+
+    <div class="sheets-step">
+      <div class="sheets-step-num">⚙️ Passo 2 — Abra o Apps Script</div>
+      <p>Na planilha aberta, clique no menu <strong>Extensões → Apps Script</strong>. Apague tudo que aparecer e cole o script abaixo:</p>
+      <div style="position:relative;margin-top:10px;">
+        <textarea id="scriptDisplay" readonly style="width:100%;height:130px;background:var(--surface3);border:1px solid var(--border);border-radius:8px;color:var(--yellow);font-family:'DM Mono',monospace;font-size:11px;padding:10px;resize:none;outline:none;line-height:1.5;"></textarea>
+        <button onclick="copyAppsScript()" style="position:absolute;top:8px;right:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:11px;font-family:'DM Mono',monospace;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--yellow)';this.style.color='var(--yellow)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="sheets-step">
+      <div class="sheets-step-num">🚀 Passo 3 — Publique como Web App</div>
+      <p>No Apps Script: clique em <strong>Implantar → Nova implantação</strong>.<br>
+      Tipo: <strong>App da Web</strong> · Executar como: <strong>Eu</strong> · Acesso: <strong>Qualquer pessoa</strong>.<br>
+      Clique em <strong>Implantar</strong>, autorize e copie a URL gerada.</p>
+      <div class="sheets-input-wrap" style="margin-top:8px">
+        <input type="text" id="sheetsUrlInput" placeholder="Cole aqui a URL do Web App (começa com https://script.google.com/macros/s/…)">
+      </div>
+    </div>
+
+    <div class="sheets-step">
+      <div class="sheets-step-num">✅ Passo 4 — Conecte ao app</div>
+      <p>Cole a URL acima e clique em <strong>Salvar & Conectar</strong>. Depois use os botões de sincronizar abaixo.</p>
+    </div>
+
+    <div class="sheets-status" id="sheetsStatus"></div>
+
+    <div class="sheets-footer">
+      <button class="btn-modal-cancel" onclick="closeSheetsModal()">Fechar</button>
+      <button class="btn-sheets-sync" onclick="syncFromSheets()">⬇️ Puxar dados</button>
+      <button class="btn-sheets-sync" onclick="syncToSheets()">⬆️ Enviar dados</button>
+      <button class="btn-sheets-connect" onclick="saveSheetsCreds()">Salvar & Conectar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let tags   = [];
+let labels = [];
+let activeFilter = 'all';
+let selectedColor = 0;
+let editingId = null;
+
+const COLORS = [
+  {hex:'#25d366',bg:'rgba(37,211,102,0.14)'},
+  {hex:'#58a6ff',bg:'rgba(88,166,255,0.14)'},
+  {hex:'#e3b341',bg:'rgba(227,179,65,0.14)'},
+  {hex:'#f85149',bg:'rgba(248,81,73,0.14)'},
+  {hex:'#bc8cff',bg:'rgba(188,140,255,0.14)'},
+  {hex:'#ff7b72',bg:'rgba(255,123,114,0.14)'},
+  {hex:'#ffa657',bg:'rgba(255,166,87,0.14)'},
+  {hex:'#79c0ff',bg:'rgba(121,192,255,0.14)'},
+];
+
+// ══════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════
+(function init(){
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('activeDate').value = today;
+  document.getElementById('inputDate').value  = today;
+
+  document.getElementById('activeDate').addEventListener('change', ()=>{
+    updateDateBadge(); loadTagsFromStorage();
+    setFilter('all', document.querySelector('[data-filter="all"]'));
+  });
+
+  // Phone mask — add & edit
+  ['inputPhone','editPhone'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', function(){
+      let v=this.value.replace(/\D/g,'').slice(0,11);
+      if(v.length>10) v=v.replace(/^(\d{2})(\d{5})(\d{4})$/,'($1) $2-$3');
+      else if(v.length>6) v=v.replace(/^(\d{2})(\d{4})(\d*)$/,'($1) $2-$3');
+      else if(v.length>2) v=v.replace(/^(\d{2})(\d*)$/,'($1) $2');
+      this.value=v;
+    });
+  });
+
+  ['inputName','inputPhone','inputDate'].forEach(id=>
+    document.getElementById(id).addEventListener('keydown',e=>{ if(e.key==='Enter') addTag(); })
+  );
+  document.getElementById('inputLabelName').addEventListener('keydown',e=>{ if(e.key==='Enter') createLabel(); });
+
+  // Close modals on overlay click
+  document.getElementById('editModal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeEditModal(); });
+  document.getElementById('sheetsModal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeSheetsModal(); });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){ closeEditModal(); closeSheetsModal(); }
+  });
+
+  buildColorPicker();
+  loadTheme();
+  loadSheetsCredentials();
+  loadLabelsFromStorage();
+  updateDateBadge();
+  loadTagsFromStorage();
+})();
+
+// ══════════════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════════════
+function loadTheme(){
+  const saved = localStorage.getItem('waTheme') || 'dark';
+  applyTheme(saved);
+}
+function toggleTheme(){
+  const curr = document.documentElement.getAttribute('data-theme');
+  applyTheme(curr==='dark'?'light':'dark');
+}
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('waTheme',t);
+  document.getElementById('btnTheme').textContent = t==='dark'?'☀️':'🌙';
+}
+
+// ══════════════════════════════════════════════
+//  TODAY BUTTON
+// ══════════════════════════════════════════════
+function goToToday(){
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('activeDate').value=today;
+  updateDateBadge(); loadTagsFromStorage();
+  setFilter('all',document.querySelector('[data-filter="all"]'));
+  showToast('📍 Voltou para hoje!');
+}
+
+// ══════════════════════════════════════════════
+//  COLOR PICKER
+// ══════════════════════════════════════════════
+function buildColorPicker(){
+  document.getElementById('colorPicker').innerHTML=
+    COLORS.map((c,i)=>`<div class="color-dot ${i===0?'selected':''}" style="background:${c.hex}" onclick="selectColor(${i},this)"></div>`).join('');
+}
+function selectColor(i,el){
+  selectedColor=i;
+  document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ══════════════════════════════════════════════
+//  LABELS
+// ══════════════════════════════════════════════
+function saveLabels(){ localStorage.setItem('waLabels',JSON.stringify(labels)); }
+function loadLabelsFromStorage(){
+  const d=localStorage.getItem('waLabels');
+  labels=d?JSON.parse(d):[];
+  renderExistingLabels(); renderLabelSelect(); renderFilterChips();
+}
+
+function createLabel(){
+  const name=document.getElementById('inputLabelName').value.trim();
+  if(!name){ showToast('⚠️ Digite o nome da etiqueta!','var(--yellow)'); return; }
+  if(labels.find(l=>l.name.toLowerCase()===name.toLowerCase()))
+    { showToast('⚠️ Etiqueta já existe!','var(--yellow)'); return; }
+  const c=COLORS[selectedColor];
+  labels.push({id:Date.now(),name,colorHex:c.hex,colorBg:c.bg});
+  saveLabels();
+  renderExistingLabels(); renderLabelSelect(); renderFilterChips();
+  document.getElementById('inputLabelName').value='';
+  showToast(`🏷️ "${name}" criada!`);
+}
+
+function deleteLabel(id){
+  if(!confirm('Remover essa etiqueta? Os contatos vinculados ficarão sem etiqueta.')) return;
+  labels=labels.filter(l=>l.id!==id);
+  tags.forEach(t=>{ if(t.labelId===id) t.labelId=null; });
+  saveLabels(); saveTags();
+  renderExistingLabels(); renderLabelSelect();
+  if(activeFilter===String(id)) setFilter('all',document.querySelector('[data-filter="all"]'));
+  else { renderFilterChips(); renderList(); }
+}
+
+function renderExistingLabels(){
+  const el=document.getElementById('existingLabels');
+  if(!labels.length){ el.innerHTML=`<span style="font-size:11px;color:var(--text-muted)">Nenhuma etiqueta criada ainda.</span>`; return; }
+  el.innerHTML=labels.map(l=>`
+    <span class="label-chip" style="color:${l.colorHex};background:${l.colorBg};border-color:${l.colorHex}55">
+      ${esc(l.name)}
+      <button class="label-chip-del" onclick="deleteLabel(${l.id})" title="Remover">✕</button>
+    </span>`).join('');
+}
+
+function renderLabelSelect(selectId){
+  ['inputLabel','editLabel'].forEach(id=>{
+    const sel=document.getElementById(id);
+    const cur=sel.value;
+    sel.innerHTML=`<option value="">— Sem etiqueta —</option>`+
+      labels.map(l=>`<option value="${l.id}">${esc(l.name)}</option>`).join('');
+    if(cur) sel.value=cur;
+  });
+}
+
+function getLabelById(id){ return labels.find(l=>l.id===Number(id))||null; }
+
+// ══════════════════════════════════════════════
+//  FILTER
+// ══════════════════════════════════════════════
+function renderFilterChips(){
+  const bar=document.getElementById('filterBar');
+  bar.querySelectorAll('[data-filter]:not([data-filter="all"]):not([data-filter="none"])').forEach(c=>c.remove());
+  labels.forEach(l=>{
+    const chip=document.createElement('button');
+    chip.className='filter-chip'+(activeFilter===String(l.id)?' active':'');
+    chip.dataset.filter=String(l.id);
+    chip.textContent=l.name;
+    if(activeFilter===String(l.id)){ chip.style.background=l.colorHex; chip.style.color='#000'; chip.style.borderColor='transparent'; }
+    chip.onclick=()=>setFilter(String(l.id),chip);
+    bar.appendChild(chip);
+  });
+}
+
+function setFilter(val,el){
+  activeFilter=val;
+  document.querySelectorAll('.filter-chip').forEach(c=>{ c.classList.remove('active'); c.style.background=''; c.style.color=''; c.style.borderColor=''; });
+  el.classList.add('active'); el.style.color='#000'; el.style.borderColor='transparent';
+  if(val==='all'||val==='none') el.style.background='var(--text-dim)';
+  else{ const lbl=getLabelById(val); if(lbl) el.style.background=lbl.colorHex; }
+  renderList();
+}
+
+// ══════════════════════════════════════════════
+//  TAGS CRUD
+// ══════════════════════════════════════════════
+function getActiveDate(){ return document.getElementById('activeDate').value; }
+function tagsKey(){ return 'waTags_'+getActiveDate(); }
+function saveTags(){ localStorage.setItem(tagsKey(),JSON.stringify(tags)); }
+function loadTagsFromStorage(){ const d=localStorage.getItem(tagsKey()); tags=d?JSON.parse(d):[]; renderList(); updateSummary(); }
+
+function addTag(){
+  const name   =document.getElementById('inputName').value.trim();
+  const phone  =document.getElementById('inputPhone').value.trim();
+  const date   =document.getElementById('inputDate').value;
+  const labelId=document.getElementById('inputLabel').value;
+  if(!name||!phone||!date){ showToast('⚠️ Preencha nome, telefone e data!','var(--yellow)'); return; }
+  tags.push({id:Date.now(),name,phone,date,labelId:labelId?Number(labelId):null});
+  saveTags(); renderList(); updateSummary();
+  document.getElementById('inputName').value='';
+  document.getElementById('inputPhone').value='';
+  document.getElementById('inputDate').value=getActiveDate();
+  document.getElementById('inputName').focus();
+}
+
+function deleteTag(id){
+  if(!confirm('Remover este contato?')) return;
+  tags=tags.filter(t=>t.id!==id);
+  saveTags(); renderList(); updateSummary();
+}
+
+// ══════════════════════════════════════════════
+//  EDIT MODAL
+// ══════════════════════════════════════════════
+function openEditModal(id){
+  const t=tags.find(t=>t.id===id); if(!t) return;
+  editingId=id;
+  document.getElementById('editName').value=t.name;
+  document.getElementById('editPhone').value=t.phone;
+  document.getElementById('editDate').value=t.date;
+  renderLabelSelect();
+  document.getElementById('editLabel').value=t.labelId||'';
+  document.getElementById('editModal').classList.add('open');
+  document.getElementById('editName').focus();
+}
+
+function closeEditModal(){ document.getElementById('editModal').classList.remove('open'); editingId=null; }
+
+function saveEdit(){
+  if(!editingId) return;
+  const t=tags.find(t=>t.id===editingId); if(!t) return;
+  const name =document.getElementById('editName').value.trim();
+  const phone=document.getElementById('editPhone').value.trim();
+  const date =document.getElementById('editDate').value;
+  const lblId=document.getElementById('editLabel').value;
+  if(!name||!phone||!date){ showToast('⚠️ Preencha todos os campos!','var(--yellow)'); return; }
+  t.name=name; t.phone=phone; t.date=date; t.labelId=lblId?Number(lblId):null;
+  saveTags(); renderList(); updateSummary(); closeEditModal();
+  showToast('✅ Contato atualizado!');
+}
+
+// ══════════════════════════════════════════════
+//  SUMMARY PANEL
+// ══════════════════════════════════════════════
+function updateSummary(){
+  document.getElementById('scTotal').textContent=tags.length;
+  document.getElementById('scWa').textContent=tags.filter(t=>t.phone).length;
+  const usedLabels=new Set(tags.filter(t=>t.labelId).map(t=>t.labelId));
+  document.getElementById('scLabels').textContent=usedLabels.size;
+  document.getElementById('scLabelsTotal').textContent=labels.length;
+  document.getElementById('scNoLabel').textContent=tags.filter(t=>!t.labelId).length;
+}
+
+// ══════════════════════════════════════════════
+//  RENDER LIST
+// ══════════════════════════════════════════════
+function searchQuery(){ return document.getElementById('searchInput').value.toLowerCase().trim(); }
+
+function filtered(){
+  let list=tags;
+  if(activeFilter==='none') list=list.filter(t=>!t.labelId);
+  else if(activeFilter!=='all') list=list.filter(t=>t.labelId===Number(activeFilter));
+  const q=searchQuery();
+  if(q) list=list.filter(t=>t.name.toLowerCase().includes(q)||t.phone.includes(q));
+  return list;
+}
+
+function renderList(){
+  const container=document.getElementById('mainList');
+  const pill=document.getElementById('countPill');
+  const visible=filtered();
+  pill.textContent=visible.length+(visible.length===1?' registro':' registros');
+
+  if(!tags.length){
+    container.innerHTML=`<div class="empty-state"><span class="es-icon">🏷️</span>Nenhum contato adicionado ainda.<br>Preencha o formulário acima para começar.</div>`;
+    return;
+  }
+  if(!visible.length){
+    container.innerHTML=`<div class="empty-state"><span class="es-icon">🔍</span>Nenhum contato encontrado.</div>`;
+    return;
+  }
+
+  if(activeFilter!=='all'){
+    container.innerHTML=`<div class="tags-container">${visible.map((t,i)=>cardHTML(t,i)).join('')}</div>`;
+    return;
+  }
+
+  // Group by label
+  const order=[],groups={};
+  visible.forEach(t=>{ const k=t.labelId?String(t.labelId):'__none__'; if(!groups[k]){groups[k]=[];order.push(k);} groups[k].push(t); });
+
+  container.innerHTML=order.map(key=>{
+    const items=groups[key];
+    let dot='var(--text-muted)',title='Sem etiqueta';
+    if(key!=='__none__'){ const lbl=getLabelById(key); if(lbl){dot=lbl.colorHex;title=lbl.name;} }
+    return `<div class="label-group">
+      <div class="group-header">
+        <div class="group-dot" style="background:${dot}"></div>
+        <span class="group-name" style="color:${dot}">${esc(title)}</span>
+        <span class="group-count">${items.length}</span>
+      </div>
+      <div class="tags-container">${items.map((t,i)=>cardHTML(t,i)).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function cardHTML(t,i){
+  const lbl=t.labelId?getLabelById(t.labelId):null;
+  const borderColor=lbl?lbl.colorHex:'var(--border)';
+  const badge=lbl
+    ?`<span class="tag-badge" style="color:${lbl.colorHex};background:${lbl.colorBg};border-color:${lbl.colorHex}44"><span style="width:6px;height:6px;border-radius:50%;background:${lbl.colorHex};flex-shrink:0;display:inline-block"></span>${esc(lbl.name)}</span>`
+    :`<span style="font-size:11px;color:var(--text-muted)">—</span>`;
+  const waNum=t.phone.replace(/\D/g,'');
+  const waLink=`https://wa.me/55${waNum}`;
+  return `
+    <div class="tag-card" style="border-left-color:${borderColor}">
+      <span class="tag-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="tag-name">${esc(t.name)}</span>
+      <span class="tag-phone">${esc(t.phone)}</span>
+      ${badge}
+      <span class="tag-date">📅 ${fmtDate(t.date)}</span>
+      <a class="btn-wa" href="${waLink}" target="_blank" rel="noopener" title="Abrir WhatsApp">💬</a>
+      <button class="btn-edit" onclick="openEditModal(${t.id})" title="Editar">✏️</button>
+      <button class="btn-delete" onclick="deleteTag(${t.id})" title="Remover">✕</button>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════
+function updateDateBadge(){
+  const d=getActiveDate(); if(!d) return;
+  const [y,m,day]=d.split('-');
+  document.getElementById('dateBadge').textContent=`${day}/${m}/${y}`;
+}
+function fmtDate(iso){
+  if(!iso) return '—'; if(iso.includes('/')) return iso;
+  const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`;
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function csvEsc(s){ return String(s).replace(/"/g,'""'); }
+
+function showToast(msg,color){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.borderColor=color||'var(--green)'; t.style.color=color||'var(--green)';
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function setSyncBar(msg,cls){
+  const b=document.getElementById('syncBar');
+  b.textContent=msg; b.className='sync-bar'+(cls?' '+cls:'');
+}
+
+// ══════════════════════════════════════════════
+//  COPY REPORT
+// ══════════════════════════════════════════════
+function copyReport(){
+  if(!tags.length){ showToast('⚠️ Nenhum contato para copiar!','var(--yellow)'); return; }
+  const d=fmtDate(getActiveDate());
+  let txt=`📋 RELATÓRIO — ${d}\n${'─'.repeat(42)}\n`;
+  const order=[],groups={};
+  tags.forEach(t=>{ const k=t.labelId?String(t.labelId):'__none__'; if(!groups[k]){groups[k]=[];order.push(k);} groups[k].push(t); });
+  order.forEach(k=>{
+    const items=groups[k];
+    const gname=k==='__none__'?'Sem etiqueta':(getLabelById(k)?.name||'?');
+    txt+=`\n🏷️ ${gname.toUpperCase()} (${items.length})\n`;
+    items.forEach((t,i)=>{ txt+=`  ${String(i+1).padStart(2,'0')}. ${t.name}\n      📱 ${t.phone}   📅 ${fmtDate(t.date)}\n`; });
+  });
+  txt+=`\n${'─'.repeat(42)}\nTotal: ${tags.length} contato${tags.length!==1?'s':''}\n`;
+  navigator.clipboard.writeText(txt).then(()=>showToast('✅ Relatório copiado!')).catch(()=>{
+    const ta=document.createElement('textarea'); ta.value=txt;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); showToast('✅ Relatório copiado!');
+  });
+}
+
+// ══════════════════════════════════════════════
+//  EXPORT CSV
+// ══════════════════════════════════════════════
+function exportCSV(){
+  if(!tags.length){ showToast('⚠️ Nenhum contato para exportar!','var(--yellow)'); return; }
+  const header=`Nome,Telefone,Data de Contato,Etiqueta,__labelId__`;
+  const meta=`"__LABELS_META__","${csvEsc(JSON.stringify(labels))}","","",""`;
+  const rows=tags.map(t=>{ const lbl=t.labelId?getLabelById(t.labelId):null; return `"${csvEsc(t.name)}","${csvEsc(t.phone)}","${fmtDate(t.date)}","${csvEsc(lbl?lbl.name:'')}","${t.labelId||''}"`; });
+  const blob=new Blob(['\uFEFF'+[header,meta,...rows].join('\n')],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=`etiquetas_${getActiveDate()}.csv`; a.click();
+  URL.revokeObjectURL(url); showToast('💾 CSV exportado!');
+}
+
+// ══════════════════════════════════════════════
+//  IMPORT CSV
+// ══════════════════════════════════════════════
+function importCSV(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const lines=ev.target.result.replace(/\r/g,'').split('\n').filter(l=>l.trim());
+    if(lines.length<2){ showToast('⚠️ CSV vazio ou inválido!','var(--yellow)'); return; }
+    let imported=0;
+    for(let i=1;i<lines.length;i++){
+      const cols=parseCSVLine(lines[i]); if(!cols.length) continue;
+      if(cols[0]==='__LABELS_META__'){
+        try{ const imp=JSON.parse(cols[1]); imp.forEach(il=>{ if(!labels.find(l=>l.name.toLowerCase()===il.name.toLowerCase())) labels.push(il); }); saveLabels(); renderExistingLabels(); renderLabelSelect(); renderFilterChips(); } catch(err){}
+        continue;
+      }
+      if(cols.length<3) continue;
+      const name=cols[0].trim(),phone=cols[1].trim(),dateRaw=cols[2].trim();
+      const lblName=cols[3]?cols[3].trim():'',lblIdRaw=cols[4]?cols[4].trim():'';
+      if(!name||!phone) continue;
+      let dateISO=dateRaw;
+      if(/^\d{2}\/\d{2}\/\d{4}$/.test(dateRaw)){ const [d,m,y]=dateRaw.split('/'); dateISO=`${y}-${m}-${d}`; }
+      let labelId=null;
+      if(lblIdRaw){ const l=getLabelById(lblIdRaw); if(l) labelId=l.id; }
+      else if(lblName){ const l=labels.find(l=>l.name.toLowerCase()===lblName.toLowerCase()); if(l) labelId=l.id; }
+      if(!tags.find(t=>t.phone===phone)){ tags.push({id:Date.now()+i,name,phone,date:dateISO,labelId}); imported++; }
+    }
+    saveTags(); renderList(); updateSummary();
+    showToast(`📥 ${imported} contato${imported!==1?'s':''} importado${imported!==1?'s':''}!`);
+  };
+  reader.readAsText(file,'utf-8'); e.target.value='';
+}
+
+function parseCSVLine(line){
+  const cols=[]; let cur='',inQ=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){ if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ; continue; }
+    if(c===','&&!inQ){cols.push(cur);cur='';continue;}
+    cur+=c;
+  }
+  cols.push(cur); return cols;
+}
+
+// ══════════════════════════════════════════════
+//  GOOGLE SHEETS INTEGRATION
+// ══════════════════════════════════════════════
+let sheetsWebAppUrl = '';
+
+function loadSheetsCredentials(){
+  sheetsWebAppUrl = localStorage.getItem('waSheetsUrl')||'';
+  const sheetsId  = localStorage.getItem('waSheetsId')||'';
+  if(sheetsWebAppUrl) document.getElementById('sheetsUrlInput')&&(document.getElementById('sheetsUrlInput').value=sheetsWebAppUrl);
+  if(sheetsId) document.getElementById('sheetsIdInput')&&(document.getElementById('sheetsIdInput').value=sheetsId);
+  updateSheetsButton();
+}
+
+function updateSheetsButton(){
+  const btn=document.getElementById('btnSheets');
+  if(sheetsWebAppUrl){ btn.classList.add('connected'); btn.querySelector('.sheets-dot').style.background='#34a853'; }
+  else{ btn.classList.remove('connected'); btn.querySelector('.sheets-dot').style.background=''; }
+}
+
+function openSheetsModal(){
+  loadSheetsCredentials();
+  const ta = document.getElementById('scriptDisplay');
+  if(ta) ta.value = APPS_SCRIPT;
+  document.getElementById('sheetsModal').classList.add('open');
+}
+function closeSheetsModal(){ document.getElementById('sheetsModal').classList.remove('open'); }
+
+function saveSheetsCreds(){
+  const url=(document.getElementById('sheetsUrlInput').value||'').trim();
+  const id =(document.getElementById('sheetsIdInput').value||'').trim();
+  if(!url){ showSheetsStatus('Cole a URL do Web App primeiro.','err'); return; }
+  sheetsWebAppUrl=url;
+  localStorage.setItem('waSheetsUrl',url);
+  localStorage.setItem('waSheetsId',id);
+  updateSheetsButton();
+  showSheetsStatus('✅ Credenciais salvas! Agora use os botões de sincronizar.','ok');
+}
+
+function showSheetsStatus(msg,cls){
+  const el=document.getElementById('sheetsStatus');
+  el.textContent=msg; el.className='sheets-status '+cls;
+  setTimeout(()=>{ if(el.className.includes(cls)) el.style.display='none'; }, 5000);
+  el.style.display='block';
+}
+
+async function syncToSheets() {
+  if (!sheetsWebAppUrl) {
+    showSheetsStatus('Configure a URL do Web App primeiro.', 'err');
+    return;
+  }
+  
+  setSyncBar('⏳ Enviando dados para o Google Sheets...', 'syncing');
+  
+  const payload = {
+    action: 'write',
+    date: getActiveDate(),
+    tags: tags,
+    labels: labels
+  };
+  
+  try {
+    await fetch(sheetsWebAppUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    setSyncBar(`✅ Dados enviados em ${new Date().toLocaleTimeString('pt-BR')}`, 'ok');
+    showSheetsStatus('✅ Dados enviados para a planilha!', 'ok');
+    showToast('✅ Sincronizado com Google Sheets!');
+    
+  } catch (error) {
+    console.error('Erro no syncToSheets:', error);
+    setSyncBar('❌ Erro ao enviar dados', 'err');
+    showSheetsStatus('❌ Erro: ' + error.message + '. Verifique a URL e permissões.', 'err');
+  }
+}
+
+async function syncFromSheets() {
+  if (!sheetsWebAppUrl) {
+    showSheetsStatus('Configure a URL do Web App primeiro.', 'err');
+    return;
+  }
+  
+  setSyncBar('⏳ Buscando dados do Google Sheets...', 'syncing');
+  
+  try {
+    const url = `${sheetsWebAppUrl}?action=read&date=${getActiveDate()}`;
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.status === 'ok') {
+      let importedTags = 0;
+      let importedLabels = 0;
+      
+      if (data.tags && data.tags.length > 0) {
+        const existingKeys = new Set(tags.map(t => `${t.phone}_${t.date}`));
+        
+        for (const remoteTag of data.tags) {
+          const key = `${remoteTag.phone}_${remoteTag.date}`;
+          if (!existingKeys.has(key)) {
+            tags.push(remoteTag);
+            importedTags++;
+          }
+        }
+        
+        saveTags();
+      }
+      
+      if (data.labels && data.labels.length > 0) {
+        for (const remoteLabel of data.labels) {
+          if (!labels.find(l => l.id === remoteLabel.id)) {
+            labels.push(remoteLabel);
+            importedLabels++;
+          }
+        }
+        
+        saveLabels();
+        renderExistingLabels();
+        renderLabelSelect();
+        renderFilterChips();
+      }
+      
+      renderList();
+      updateSummary();
+      
+      setSyncBar(`✅ Sincronizado: ${importedTags} contatos, ${importedLabels} etiquetas`, 'ok');
+      showSheetsStatus(`✅ Dados carregados! (${importedTags} novos contatos)`, 'ok');
+      showToast(`📥 Sincronizado com sucesso!`);
+    } else {
+      throw new Error(data.message || 'Erro na resposta da API');
+    }
+    
+  } catch (error) {
+    console.error('Erro no syncFromSheets:', error);
+    setSyncBar('❌ Erro ao buscar dados', 'err');
+    showSheetsStatus('❌ Erro: ' + error.message + '. Verifique a URL e permissões.', 'err');
+  }
+}
+
+function copyAppsScript(){
+  const scriptText = document.getElementById('scriptDisplay').value;
+  navigator.clipboard.writeText(scriptText).then(()=>{
+    showSheetsStatus('✅ Script copiado! Cole no Apps Script e publique como Web App.','ok');
+  }).catch(()=>{ 
+    showSheetsStatus('Copie manualmente o script acima.','err');
+  });
+}
+
+const APPS_SCRIPT = `const SHEET_NAME = "Dados_Etiquetas";
+
+function doGet(e) {
+  const action = e?.parameter?.action;
+  const date = e?.parameter?.date;
+  
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(SHEET_NAME);
+    
+    if (!sheet) {
+      return jsonResponse({ status: "ok", tags: [], labels: [] });
+    }
+    
+    if (action === "read" && date) {
+      const tags = readTagsByDate(sheet, date);
+      const labels = readLabels(sheet);
+      return jsonResponse({ status: "ok", tags, labels });
+    }
+    
+    return jsonResponse({ status: "ok", tags: [], labels: [] });
+    
+  } catch(error) {
+    return jsonResponse({ status: "err", message: error.toString() });
+  }
+}
+
+function doPost(e) {
+  try {
+    const payload = JSON.parse(e.postData.contents);
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(SHEET_NAME);
+    
+    if (!sheet) {
+      sheet = ss.insertSheet(SHEET_NAME);
+      sheet.appendRow(["data_criacao", "tipo", "conteudo", "data_referencia"]);
+    }
+    
+    if (payload.action === "write") {
+      for (const tag of payload.tags) {
+        sheet.appendRow([
+          new Date().toISOString(),
+          "tag",
+          JSON.stringify(tag),
+          payload.date
+        ]);
+      }
+      
+      for (const label of payload.labels) {
+        sheet.appendRow([
+          new Date().toISOString(),
+          "label",
+          JSON.stringify(label),
+          ""
+        ]);
+      }
+      
+      return jsonResponse({ status: "ok", message: "Dados salvos com sucesso!" });
+    }
+    
+    return jsonResponse({ status: "err", message: "Ação desconhecida" });
+    
+  } catch(error) {
+    return jsonResponse({ status: "err", message: error.toString() });
+  }
+}
+
+function readTagsByDate(sheet, date) {
+  const data = sheet.getDataRange().getValues();
+  const tags = [];
+  
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][1] === "tag" && data[i][3] === date) {
+      try {
+        const tag = JSON.parse(data[i][2]);
+        tags.push(tag);
+      } catch(e) {}
+    }
+  }
+  
+  return tags;
+}
+
+function readLabels(sheet) {
+  const data = sheet.getDataRange().getValues();
+  const labels = [];
+  
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][1] === "label") {
+      try {
+        const label = JSON.parse(data[i][2]);
+        if (!labels.find(l => l.id === label.id)) {
+          labels.push(label);
+        }
+      } catch(e) {}
+    }
+  }
+  
+  return labels;
+}
+
+function jsonResponse(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}`;
+</script>
+</body>
+</html>
