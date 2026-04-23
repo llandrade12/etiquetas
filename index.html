@@ -1031,9 +1031,10 @@ function renderExistingLabels(){
     </span>`).join('');
 }
 
-function renderLabelSelect(selectId){
+function renderLabelSelect(){
   ['inputLabel','editLabel'].forEach(id=>{
     const sel=document.getElementById(id);
+    if(!sel) return;
     const cur=sel.value;
     sel.innerHTML=`<option value="">— Sem etiqueta —</option>`+
       labels.map(l=>`<option value="${l.id}">${esc(l.name)}</option>`).join('');
@@ -1048,6 +1049,7 @@ function getLabelById(id){ return labels.find(l=>l.id===Number(id))||null; }
 // ══════════════════════════════════════════════
 function renderFilterChips(){
   const bar=document.getElementById('filterBar');
+  if(!bar) return;
   bar.querySelectorAll('[data-filter]:not([data-filter="all"]):not([data-filter="none"])').forEach(c=>c.remove());
   labels.forEach(l=>{
     const chip=document.createElement('button');
@@ -1326,43 +1328,65 @@ function parseCSVLine(line){
 let sheetsWebAppUrl = '';
 
 function loadSheetsCredentials(){
-  sheetsWebAppUrl = localStorage.getItem('waSheetsUrl')||'';
-  const sheetsId  = localStorage.getItem('waSheetsId')||'';
-  if(sheetsWebAppUrl) document.getElementById('sheetsUrlInput')&&(document.getElementById('sheetsUrlInput').value=sheetsWebAppUrl);
-  if(sheetsId) document.getElementById('sheetsIdInput')&&(document.getElementById('sheetsIdInput').value=sheetsId);
+  sheetsWebAppUrl = localStorage.getItem('waSheetsUrl') || '';
+  const sheetsUrlInput = document.getElementById('sheetsUrlInput');
+  if(sheetsUrlInput && sheetsWebAppUrl) {
+    sheetsUrlInput.value = sheetsWebAppUrl;
+  }
   updateSheetsButton();
 }
 
 function updateSheetsButton(){
-  const btn=document.getElementById('btnSheets');
-  if(sheetsWebAppUrl){ btn.classList.add('connected'); btn.querySelector('.sheets-dot').style.background='#34a853'; }
-  else{ btn.classList.remove('connected'); btn.querySelector('.sheets-dot').style.background=''; }
+  const btn = document.getElementById('btnSheets');
+  if(!btn) return;
+  if(sheetsWebAppUrl){ 
+    btn.classList.add('connected'); 
+    const dot = btn.querySelector('.sheets-dot');
+    if(dot) dot.style.background = '#34a853';
+  } else { 
+    btn.classList.remove('connected'); 
+    const dot = btn.querySelector('.sheets-dot');
+    if(dot) dot.style.background = '';
+  }
 }
 
 function openSheetsModal(){
   loadSheetsCredentials();
   const ta = document.getElementById('scriptDisplay');
   if(ta) ta.value = APPS_SCRIPT;
-  document.getElementById('sheetsModal').classList.add('open');
+  const modal = document.getElementById('sheetsModal');
+  if(modal) modal.classList.add('open');
 }
-function closeSheetsModal(){ document.getElementById('sheetsModal').classList.remove('open'); }
+
+function closeSheetsModal(){ 
+  const modal = document.getElementById('sheetsModal');
+  if(modal) modal.classList.remove('open');
+}
 
 function saveSheetsCreds(){
-  const url=(document.getElementById('sheetsUrlInput').value||'').trim();
-  const id =(document.getElementById('sheetsIdInput').value||'').trim();
-  if(!url){ showSheetsStatus('Cole a URL do Web App primeiro.','err'); return; }
-  sheetsWebAppUrl=url;
-  localStorage.setItem('waSheetsUrl',url);
-  localStorage.setItem('waSheetsId',id);
+  const urlInput = document.getElementById('sheetsUrlInput');
+  if(!urlInput) return;
+  const url = urlInput.value.trim();
+  
+  if(!url){ 
+    showSheetsStatus('Cole a URL do Web App primeiro.', 'err'); 
+    return; 
+  }
+  sheetsWebAppUrl = url;
+  localStorage.setItem('waSheetsUrl', url);
   updateSheetsButton();
-  showSheetsStatus('✅ Credenciais salvas! Agora use os botões de sincronizar.','ok');
+  showSheetsStatus('✅ Credenciais salvas! Agora use os botões de sincronizar.', 'ok');
 }
 
-function showSheetsStatus(msg,cls){
-  const el=document.getElementById('sheetsStatus');
-  el.textContent=msg; el.className='sheets-status '+cls;
-  setTimeout(()=>{ if(el.className.includes(cls)) el.style.display='none'; }, 5000);
-  el.style.display='block';
+function showSheetsStatus(msg, cls){
+  const el = document.getElementById('sheetsStatus');
+  if(!el) return;
+  el.textContent = msg;
+  el.className = 'sheets-status ' + cls;
+  el.style.display = 'block';
+  setTimeout(() => { 
+    if(el.style.display === 'block') el.style.display = 'none'; 
+  }, 5000);
 }
 
 async function syncToSheets() {
